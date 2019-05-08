@@ -69,51 +69,26 @@ class App extends React.Component {
   handleChange = ((event) => {
     const target = event.target;
     const value = target.value;
-		console.log("TCL: App -> handleChange -> value", value)
     const name = target.name;
-		console.log("TCL: App -> handleChange -> target.name", target.name)
     this.setState({
       [name]: value
     })
-    console.log(event.target.value)
   })
 
-  handleCreate2 = ((event) => {
+  handleCreate = event => {
     event.preventDefault();
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-    console.log('Default prevented')
-    let title = event['title'].value
     let currentExercises = this.state.exercises
-		console.log("TCL: App -> currentExercises", currentExercises)
-    if (title) {
+    if (this.state.title !== ''){
       this.setState({
         exercises: [
           ...currentExercises,
           {
-            title: title,
+            title: this.state.title,
             id: Date.now(),
-          }
-        ]
-      })
-    }
-  })
-
-  handleCreate = e => {
-    e.preventDefault()
-    const target = e.target
-    
-    if (target.value) {
-      this.setState(({ exercises, title }) => ({
-        exercises: [
-          ...exercises,
-          {
-            title: target.value,
-            id: Date.now()
           }
         ],
         title: ''
-      }))
+      })
     }
   }
 
@@ -127,8 +102,6 @@ class App extends React.Component {
     const target = event.target
     const value = target.value
     const currentTheme = (target.name === 'type' ? {} : this.state.theme)
-    console.log(target.name)
-    console.log([value])
     this.setState({
       [target.name]: value
     })
@@ -183,7 +156,7 @@ class App extends React.Component {
               <MenuItem value='dark'>Dark</MenuItem>
             </Select>
           </FormControl>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={this.handleCreate}>
             <TextField
               name='title'
               label='Exercise'
@@ -191,7 +164,7 @@ class App extends React.Component {
               onChange={this.handleChange}
               margin='normal'
             />
-            <Button type='submit' color='primary' variant='contained' onSubmit={this.handleCreate}>Create</Button>
+            <Button type='submit' color='primary' variant='contained'>Create</Button>
           </form>
           <List>
             {exercises.map(({ id, title }) =>
